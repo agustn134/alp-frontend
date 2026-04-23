@@ -23,7 +23,6 @@ export class Register {
   isLoading = false;
   hidePassword = true;
 
-  //formulario reactivo con validaciones estrictas para que no se pueda manipular el html
   registerForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     lastname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(250)]],
@@ -47,7 +46,6 @@ export class Register {
       },
       error: (error) => {
         this.isLoading = false;
-        // El interceptor se encarga del mensaje rojo si hay error
       }
     });
   }

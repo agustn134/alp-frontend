@@ -14,7 +14,7 @@ export class AuditService {
     return this.http.get<any[]>(`${this.apiUrl}/my-logs`, { withCredentials: true });
   }
 
-  // Obtiene todos los logs (Solo Admin) y aplica los filtros
+  // Obtiene todos los logs (de Admin) y aplica los filtros
   getAllLogs(filters: any): Observable<any[]> {
     let params = new HttpParams();
 

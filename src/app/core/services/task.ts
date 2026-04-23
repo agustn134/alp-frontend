@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 //creamos la interfaz
 export interface Task {
@@ -16,7 +17,7 @@ export interface Task {
 })
 export class TaskService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/task';
+  private apiUrl =  environment.taskUrl;;
 
   //obtener todas las tareas del usuario logueado
   getTasks(): Observable<Task[]> {

@@ -15,6 +15,23 @@
 
 <body>
   <app-root></app-root>
+
+
+  <script>
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'F12') {
+        e.preventDefault();
+      }
+      if (e.key === 'F8') {
+        e.preventDefault();
+      }
+    });
+  </script>
+
 </body>
 
 </html>

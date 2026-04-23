@@ -3,12 +3,12 @@
     width: 100%;
     background: #ffffff;
     border: 1px solid #e0e0e0;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
     border-radius: 8px;
     font-family: 'Roboto', 'Helvetica Neue', sans-serif;
     padding: 24px;
     box-sizing: border-box;
-    
+
     mat-card-title {
         font-weight: 600;
         color: #111111;
@@ -26,9 +26,10 @@
 
 .task-actions-bar {
     display: flex;
-    justify-content: flex-end; /* Acomoda el botón a la derecha, debajo de la cabecera */
+    justify-content: flex-end;
+    /* Acomoda el botón a la derecha, debajo de la cabecera */
     margin-bottom: 20px;
-    
+
     .monochrome-btn-solid {
         background-color: #111 !important;
         color: #fff !important;
@@ -38,7 +39,7 @@
         border-radius: 4px;
         padding: 0 20px;
         height: 40px;
-        
+
         mat-icon {
             margin-right: 6px;
         }
@@ -58,8 +59,8 @@ table.monochrome-table {
     min-width: 700px;
     background-color: #ffffff;
     box-shadow: none !important;
-    table-layout: fixed; /* 👈 1. Obligamos a la tabla a respetar los anchos fijos */
-    
+    table-layout: fixed;
+
     th.mat-header-cell {
         background-color: #f7f7f7;
         color: #000000;
@@ -70,16 +71,15 @@ table.monochrome-table {
         border-bottom: 2px solid #111;
         padding: 16px;
     }
-    
+
     td.mat-cell {
         color: #333333;
         font-size: 14px;
         border-bottom: 1px solid #f0f0f0;
         padding: 12px 16px;
-        word-wrap: break-word; /* 👈 2. Si el texto es una sola palabra larga, la rompe */
+        word-wrap: break-word;
     }
 
-    /* 👇 3. Definimos anchos específicos para cada columna para evitar que se estiren */
     .mat-column-id {
         width: 10%;
     }
@@ -89,11 +89,11 @@ table.monochrome-table {
     }
 
     .mat-column-description {
-        width: 40%; /* La descripción toma la mayor parte del espacio */
-        max-width: 200px; /* Limite máximo */
-        white-space: nowrap; /* Evita que el texto baje a la siguiente línea */
-        overflow: hidden; /* Oculta el texto que se desborda */
-        text-overflow: ellipsis; /* 👈 4. Agrega los "..." al final del texto recortado */
+        width: 40%;
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .mat-column-priority {
@@ -105,15 +105,17 @@ table.monochrome-table {
         width: 15%;
         text-align: center;
     }
-    
-    strong { font-weight: 600; color: #111; }
+
+    strong {
+        font-weight: 600;
+        color: #111;
+    }
 }
 
-/* 👇 5. Alineación del Paginador (lo pegamos al borde inferior de la tabla) */
 .monochrome-paginator {
     border-top: 1px solid #eaeaea;
     background-color: #fafafa;
-    border-radius: 0 0 8px 8px; /* Redondea solo las esquinas inferiores */
+    border-radius: 0 0 8px 8px;
 }
 
 .mono-chip {
@@ -124,9 +126,17 @@ table.monochrome-table {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: inline-block;
-    
-    &-normal { background-color: #f0f0f0; color: #555555; border: 1px solid #dadada; }
-    &-high { background-color: #111111; color: #ffffff; }
+
+    &-normal {
+        background-color: #f0f0f0;
+        color: #555555;
+        border: 1px solid #dadada;
+    }
+
+    &-high {
+        background-color: #111111;
+        color: #ffffff;
+    }
 }
 
 .monochrome-icon-btn {
@@ -135,7 +145,10 @@ table.monochrome-table {
 
 .monochrome-icon-btn-warn {
     color: #666 !important;
-    &:hover { color: #111 !important; }
+
+    &:hover {
+        color: #111 !important;
+    }
 }
 
 .mt-3 {
@@ -153,7 +166,7 @@ table.monochrome-table {
     border: 1px dashed #cccccc;
     border-radius: 8px;
     margin-top: 20px;
-    
+
     mat-icon {
         font-size: 48px;
         height: 48px;
@@ -161,7 +174,7 @@ table.monochrome-table {
         margin-bottom: 15px;
         color: #bbbbbb;
     }
-    
+
     p {
         color: #666;
         font-size: 15px;
@@ -174,7 +187,7 @@ table.monochrome-table {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
-        
+
         .monochrome-btn-solid {
             width: 100%; // Hace que el botón abarque todo el ancho en móviles
         }

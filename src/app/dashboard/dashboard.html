@@ -8,13 +8,13 @@
     <mat-card class="monochrome-card">
         <mat-card-header>
             <mat-card-title>
-                ¡Bienvenido, @if(user){ {{user.name}} {{user.lastname}} }!
+                ¡Bienvenido, @if(user){ {{user.name}} }!
             </mat-card-title>
             <mat-card-subtitle>Has accedido satisfactoriamente</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <p class="mt-3">Acreditado como: <strong>@if(user){ {{user.username}} }</strong></p>
-            <p class="secondary-text">El token se inyecta de manera segura gracias al Interceptor.</p>
+            <p class="mt-3" style="margin-bottom: 5px;">Username: <strong>@if(user){ {{user.username}} }</strong></p>
+            <p style="margin-top: 0;">Rol: <strong>@if(user){ {{user.role}} }</strong></p>
         </mat-card-content>
     </mat-card>
 

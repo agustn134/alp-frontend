@@ -50,7 +50,7 @@ export class AuditLogs implements OnInit {
   ngOnInit() {
     this.authSvc.getMe().subscribe({
       next: (user) => {
-        // Verificamos si el usuario es administrador
+        //si el usuario es administrador
         this.isAdmin = user.role === 'ADMIN';
         this.cdr.detectChanges();
         this.loadLogs();
@@ -90,7 +90,7 @@ export class AuditLogs implements OnInit {
   exportToXML() {
     const logs = this.dataSource.data;
     if (!logs || logs.length === 0) {
-      return;  // No exportar si está vacío
+      return;
     }
 
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<auditLogs>\n';

@@ -15,14 +15,14 @@ import { MatChipsModule } from '@angular/material/chips';
 @Component({
   selector: 'app-task-list',
   imports: [
-    MatTableModule, 
-    MatPaginatorModule, 
+    MatTableModule,
+    MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatButtonModule, 
-    MatIconModule, 
-    MatCardModule, 
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
     MatChipsModule
   ],
   templateUrl: './task-list.html',
@@ -38,17 +38,15 @@ export class TaskList implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  // Estado interno para múltiples combinaciones de búsqueda
   filterValues = {
     text: '',
     priority: 'ALL'
   };
 
   ngOnInit() {
-    // Sobreescribimos el filtro para leer el objeto parseado
     this.dataSource.filterPredicate = (data: Task, filterStr: string) => {
       const searchTerms = JSON.parse(filterStr);
-      
+
       let priorityMatch = true;
       if (searchTerms.priority !== 'ALL') {
         const isHigh = searchTerms.priority === 'TRUE';
@@ -72,7 +70,7 @@ export class TaskList implements OnInit {
       next: (data) => {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
       }
     });
   }

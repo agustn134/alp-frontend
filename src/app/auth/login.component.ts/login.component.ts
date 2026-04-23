@@ -24,13 +24,12 @@ export class LoginComponent {
   errorMessage: string | null = null;
   isLoading: boolean = false;
 
-  //definimos el formulario y ponemos sus validaciones (independientes del HTML)
   loginForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(200)]]
   });
 
-  hidePassword = true; // Para el ojito de la contraseña
+  hidePassword = true;
 
   onSubmit() {
     if (this.loginForm.invalid) return;
@@ -50,8 +49,6 @@ export class LoginComponent {
       },
       error: (error) => {
         this.isLoading = false;
-        // No necesitamos hacer nada extra aquí, tu ErrorHandlerService global 
-        // saltará automáticamente con el mensaje rojo gracias al interceptor.
       }
     });
   }
