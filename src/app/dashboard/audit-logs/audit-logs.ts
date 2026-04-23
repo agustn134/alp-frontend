@@ -14,6 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { CommonModule } from '@angular/common';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-audit-logs',
@@ -21,7 +22,8 @@ import { MatTableDataSource } from '@angular/material/table';
   imports: [
     CommonModule, ReactiveFormsModule, MatTableModule, MatCardModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule,
-    MatDatepickerModule, MatNativeDateModule, MatChipsModule, MatPaginatorModule
+    MatDatepickerModule, MatNativeDateModule, MatChipsModule, MatPaginatorModule,
+    MatIconModule
   ],
   templateUrl: './audit-logs.html',
   styleUrl: './audit-logs.scss'
@@ -83,5 +85,35 @@ export class AuditLogs implements OnInit {
   clearFilters() {
     this.filterForm.reset();
     this.loadLogs();
+  }
+
+  exportToXML() {
+    const logs = this.dataSource.data;
+    if (!logs || logs.length === 0) {
+      return;  // No exportar si está vacío
+    }
+
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<auditLogs>\n';
+    logs.forEach((log: any) => {
+      xml += '  <log>\n';
+      xml += `    <timestamp>${log.timestamp}</timestamp>\n`;
+      xml += `    <user_id>${log.user_id || 'Sistema'}</user_id>\n`;
+      xml += `    <action>${log.action || ''}</action>\n`;
+      xml += `    <severity>${log.severity || ''}</severity>\n`;
+      xml += `    <statuscode>${log.statuscode || ''}</statuscode>\n`;
+      xml += `    <error>${log.error ? log.error.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : ''}</error>\n`;
+      xml += '  </log>\n';
+    });
+    xml += '</auditLogs>';
+
+    const blob = new Blob([xml], { type: 'application/xml' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.xml`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 }

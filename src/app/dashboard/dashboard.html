@@ -24,5 +24,10 @@
     <div class="section-wrapper mt-4">
         <app-audit-logs></app-audit-logs>
     </div>
+    @if (user?.role === 'ADMIN') {
+    <div class="section-wrapper mt-4">
+        <app-user-management></app-user-management>
+    </div>
+    }
 
 </div>

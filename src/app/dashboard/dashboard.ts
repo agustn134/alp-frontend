@@ -6,10 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { TaskList } from './task-list/task-list.js';
 import { AuditLogs } from "./audit-logs/audit-logs";
+import { UserManagement } from "./user-management/user-management";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MatToolbarModule, MatButtonModule, MatCardModule, TaskList, AuditLogs],
+  imports: [MatToolbarModule, MatButtonModule, MatCardModule, TaskList, AuditLogs, UserManagement],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

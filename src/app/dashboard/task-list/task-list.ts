@@ -2,6 +2,9 @@ import { Component, inject, OnInit, ChangeDetectorRef, ViewChild } from '@angula
 import { TaskService, Task } from '../../core/services/task';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +14,17 @@ import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-task-list',
-  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatCardModule, MatChipsModule],
+  imports: [
+    MatTableModule, 
+    MatPaginatorModule, 
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule, 
+    MatIconModule, 
+    MatCardModule, 
+    MatChipsModule
+  ],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
@@ -25,7 +38,32 @@ export class TaskList implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  // Estado interno para múltiples combinaciones de búsqueda
+  filterValues = {
+    text: '',
+    priority: 'ALL'
+  };
+
   ngOnInit() {
+    // Sobreescribimos el filtro para leer el objeto parseado
+    this.dataSource.filterPredicate = (data: Task, filterStr: string) => {
+      const searchTerms = JSON.parse(filterStr);
+      
+      let priorityMatch = true;
+      if (searchTerms.priority !== 'ALL') {
+        const isHigh = searchTerms.priority === 'TRUE';
+        priorityMatch = data.priority === isHigh;
+      }
+
+      let textMatch = true;
+      if (searchTerms.text) {
+        const searchString = `${data.name} ${data.description}`.toLowerCase();
+        textMatch = searchString.indexOf(searchTerms.text.toLowerCase()) !== -1;
+      }
+
+      return priorityMatch && textMatch;
+    };
+
     this.loadTasks();
   }
 
@@ -34,10 +72,26 @@ export class TaskList implements OnInit {
       next: (data) => {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
-        this.cdr.detectChanges(); //?es para manejar el ciclo de vida de Angular de forma segura
-        //?es decir, para que se reflejen los cambios en la vista  y no quede en un estado inconsistente
+        this.cdr.detectChanges(); 
       }
     });
+  }
+
+  applyTextFilter(event: Event) {
+    this.filterValues.text = (event.target as HTMLInputElement).value;
+    this.triggerFilter();
+  }
+
+  applyPriorityFilter(value: string) {
+    this.filterValues.priority = value;
+    this.triggerFilter();
+  }
+
+  triggerFilter() {
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   deleteTask(id: number) {

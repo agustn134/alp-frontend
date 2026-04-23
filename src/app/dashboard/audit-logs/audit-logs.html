@@ -34,9 +34,15 @@
                 <input matInput type="number" formControlName="userId" placeholder="Ej: 1">
             </mat-form-field>
 
-            <div class="filter-actions-mono">
+            <div class="filter-actions-mono" style="display: flex; gap: 10px;">
                 <button mat-flat-button class="monochrome-btn-primary" type="submit">Filtrar</button>
                 <button mat-button class="monochrome-btn-secondary" type="button" (click)="clearFilters()">Limpiar</button>
+                
+                <span style="flex: 1;"></span>
+                
+                <button mat-stroked-button type="button" (click)="exportToXML()" style="border-color: #111111; color: #111111;">
+                    <mat-icon>code</mat-icon> Exportar XML
+                </button>
             </div>
         </form>
         }

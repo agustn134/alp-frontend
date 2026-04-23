@@ -4,7 +4,24 @@
     </mat-card-header>
 
     <mat-card-content>
-        <div class="task-actions-bar">
+        <div class="task-actions-bar" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px;">
+            <div style="display: flex; gap: 15px; flex-grow: 1;">
+                <mat-form-field appearance="outline" class="monochrome-field" style="margin-bottom: -1.25em; max-width: 250px;">
+                    <mat-label>Búsqueda por texto...</mat-label>
+                    <input matInput (keyup)="applyTextFilter($event)" placeholder="Ej. reporte">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline" class="monochrome-field" style="margin-bottom: -1.25em; max-width: 180px;">
+                    <mat-label>Prioridad</mat-label>
+                    <mat-select (selectionChange)="applyPriorityFilter($event.value)" value="ALL" panelClass="monochrome-select-panel">
+                        <mat-option value="ALL">Todas</mat-option>
+                        <mat-option value="TRUE">Alta</mat-option>
+                        <mat-option value="FALSE">Normal</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            
             <button mat-flat-button class="monochrome-btn-solid" (click)="openCreateTask()">
                 <mat-icon>add</mat-icon> Nueva Tarea
             </button>
