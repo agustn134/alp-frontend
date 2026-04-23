@@ -20,6 +20,7 @@ export class Register {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
+  isLoading = false;
   hidePassword = true;
 
   //formulario reactivo con validaciones estrictas para que no se pueda manipular el html
@@ -33,13 +34,21 @@ export class Register {
   onSubmit() {
     if (this.registerForm.invalid) return;
 
+    this.isLoading = true;
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {
-        this.snackBar.open('¡Usuario registrado con éxito!', 'Cerrar', { duration: 3000 });
-        this.router.navigate(['/login']); // Lo mandamos a loguearse
+        this.isLoading = false;
+        this.snackBar.open('¡Cuenta creada exitosamente! Por favor inicia sesión.', 'Cerrar', {
+          duration: 5000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        });
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        // El interceptor se encarga del mensaje rojo si hay error
       }
     });
-    //otra vez, si salen los errores se van a ir al error handler
   }
 }
-

@@ -1,24 +1,28 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="monochrome-toolbar">
     <span>Notas Seguras</span>
     <span class="spacer"></span>
-    <button mat-button (click)="onLogout()">Cerrar Sesión</button>
+    <button mat-button class="monochrome-btn-outline" (click)="onLogout()">Cerrar Sesión</button>
 </mat-toolbar>
 
 <div class="dashboard-container">
-    <mat-card>
+    <mat-card class="monochrome-card">
         <mat-card-header>
             <mat-card-title>
                 ¡Bienvenido, @if(user){ {{user.name}} {{user.lastname}} }!
             </mat-card-title>
-            <mat-card-subtitle>Has accedido</mat-card-subtitle>
+            <mat-card-subtitle>Has accedido satisfactoriamente</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <p class="mt-3">Tu usuario es: <strong>@if(user){ {{user.username}} }</strong></p>
-            <p>El token se inyecta de manera segura gracias al Interceptor.</p>
+            <p class="mt-3">Acreditado como: <strong>@if(user){ {{user.username}} }</strong></p>
+            <p class="secondary-text">El token se inyecta de manera segura gracias al Interceptor.</p>
         </mat-card-content>
     </mat-card>
 
-    <div style="width: 100%; max-width: 800px;">
+    <div class="section-wrapper">
         <app-task-list></app-task-list>
     </div>
+    <div class="section-wrapper mt-4">
+        <app-audit-logs></app-audit-logs>
+    </div>
+
 </div>

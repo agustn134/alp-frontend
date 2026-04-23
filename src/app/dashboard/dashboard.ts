@@ -5,10 +5,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { TaskList } from './task-list/task-list.js';
+import { AuditLogs } from "./audit-logs/audit-logs";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MatToolbarModule, MatButtonModule, MatCardModule, TaskList],
+  imports: [MatToolbarModule, MatButtonModule, MatCardModule, TaskList, AuditLogs],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

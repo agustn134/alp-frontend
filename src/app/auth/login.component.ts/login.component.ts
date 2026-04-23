@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,8 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+
   errorMessage: string | null = null;
   isLoading: boolean = false;
 
@@ -30,7 +33,6 @@ export class LoginComponent {
   hidePassword = true; // Para el ojito de la contraseña
 
   onSubmit() {
-    //si el profe hackea el HTML y quita el disabled del botón, esta línea lo frena al profe
     if (this.loginForm.invalid) return;
 
     this.isLoading = true;
@@ -38,17 +40,18 @@ export class LoginComponent {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
-        console.log('Login exitoso');
-        // Forzamos la navegación
-        this.router.navigate(['/dashboard']).then(nav => {
-          if (!nav) {
-            console.error('La navegación al dashboard falló. Revisa tus rutas.');
-          }
-        });
-      },
-      error: (err) => {
-        this.errorMessage = 'Usuario o contraseña incorrectos';
         this.isLoading = false;
+        this.snackBar.open('¡Login exitoso! Bienvenido.', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        });
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        // No necesitamos hacer nada extra aquí, tu ErrorHandlerService global 
+        // saltará automáticamente con el mensaje rojo gracias al interceptor.
       }
     });
   }

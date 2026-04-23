@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { TaskService, Task } from '../../core/services/task';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -10,7 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-task-list',
-  imports: [MatTableModule, MatButtonModule, MatIconModule, MatCardModule, MatChipsModule],
+  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatCardModule, MatChipsModule],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
@@ -19,8 +20,10 @@ export class TaskList implements OnInit {
   private dialog = inject(MatDialog);
   private cdr = inject(ChangeDetectorRef);
 
-  tasks: Task[] = [];
+  dataSource = new MatTableDataSource<Task>([]);
   displayedColumns: string[] = ['id', 'name', 'description', 'priority', 'actions'];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit() {
     this.loadTasks();
@@ -29,7 +32,8 @@ export class TaskList implements OnInit {
   loadTasks() {
     this.taskService.getTasks().subscribe({
       next: (data) => {
-        this.tasks = data;
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
         this.cdr.detectChanges(); //?es para manejar el ciclo de vida de Angular de forma segura
         //?es decir, para que se reflejen los cambios en la vista  y no quede en un estado inconsistente
       }

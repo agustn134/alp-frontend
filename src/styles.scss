@@ -7,31 +7,89 @@
 
 html {
   height: 100%;
-  @include mat.theme((color: (primary: mat.$rose-palette,
-        tertiary: mat.$red-palette,
+  @include mat.theme((
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$cyan-palette,
       ),
       typography: Roboto,
-      density: 0,
+      density: -1,
     ));
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
   height: 100%;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
 }
 
-/* You can add global styles to this file, and also import other style files */
+/* GLOBAL MONOCHROMATIC OVERRIDES FOR ALL ANGULAR FORM ELEMENTS */
+:root {
+    --mdc-outlined-text-field-focus-outline-color: #111111 !important;
+    --mdc-outlined-text-field-hover-outline-color: #999999 !important;
+    --mdc-outlined-text-field-outline-color: #d0d0d0 !important;
+    --mdc-outlined-text-field-focus-label-text-color: #111111 !important;
+    --mdc-outlined-text-field-caret-color: #111111 !important;
+}
+
+/* Global Select Panel Style */
+.mat-mdc-select-panel {
+    background-color: #ffffff !important;
+    border-radius: 4px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+
+    .mat-mdc-option {
+        color: #333333 !important;
+        font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+        
+        &:hover, &:focus, &.mat-mdc-option-active {
+            background-color: #f7f7f7 !important;
+        }
+
+        &.mdc-list-item--selected {
+            background-color: #eeeeee !important;
+            color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .mdc-list-item__end, .mat-pseudo-checkbox {
+            color: #111111 !important;
+        }
+        
+        .mat-pseudo-checkbox-checked::after {
+            background-color: transparent !important;
+            border-color: #111111 !important;
+        }
+    }
+}
+
+/* Global Focused SVG arrows for Mat Selects */
+.mat-mdc-select.mat-mdc-select-focused .mat-mdc-select-arrow svg,
+.mat-mdc-select .mat-mdc-select-arrow svg {
+    fill: #111111 !important;
+    color: #111111 !important;
+}
+
+/* Datepicker Monochrome Overrides */
+.mat-calendar-body-selected {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    border-color: #111111 !important;
+}
+
+/* Estilos para notificaciones de error */
+.error-snackbar {
+    background-color: #f44336 !important; /* Rojo de error de Material */
+    color: white !important;
+}
+
+.error-snackbar button {
+    color: white !important; /* Para que el botón de 'Cerrar' se vea bien */
+}

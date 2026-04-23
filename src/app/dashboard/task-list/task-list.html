@@ -1,15 +1,18 @@
-<mat-card class="task-card">
-    <mat-card-header class="card-header">
+<mat-card class="monochrome-task-card">
+    <mat-card-header class="task-header-mono">
         <mat-card-title>Mis Tareas</mat-card-title>
-        <button mat-flat-button color="primary" (click)="openCreateTask()">
-            <mat-icon>add</mat-icon> Nueva Tarea
-        </button>
     </mat-card-header>
 
     <mat-card-content>
-        @if (tasks.length > 0) {
-        <div class="table-responsive">
-            <table mat-table [dataSource]="tasks" class="mat-elevation-z2 mt-3">
+        <div class="task-actions-bar">
+            <button mat-flat-button class="monochrome-btn-solid" (click)="openCreateTask()">
+                <mat-icon>add</mat-icon> Nueva Tarea
+            </button>
+        </div>
+
+        @if (dataSource.data.length > 0) {
+        <div class="table-responsive-mono mt-3">
+            <table mat-table [dataSource]="dataSource" class="monochrome-table">
 
                 <ng-container matColumnDef="id">
                     <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -29,19 +32,19 @@
                 <ng-container matColumnDef="priority">
                     <th mat-header-cell *matHeaderCellDef> Prioridad </th>
                     <td mat-cell *matCellDef="let element">
-                        <mat-chip [color]="element.priority ? 'warn' : 'accent'" highlighted>
+                        <span class="mono-chip" [class.mono-chip-high]="element.priority" [class.mono-chip-normal]="!element.priority">
                             {{element.priority ? 'Alta' : 'Normal'}}
-                        </mat-chip>
+                        </span>
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef class="text-center"> Acciones </th>
                     <td mat-cell *matCellDef="let element" class="text-center">
-                        <button mat-icon-button color="primary" (click)="openEditTask(element)">
+                        <button mat-icon-button class="monochrome-icon-btn" (click)="openEditTask(element)">
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <button mat-icon-button color="warn" (click)="deleteTask(element.id)">
+                        <button mat-icon-button class="monochrome-icon-btn-warn" (click)="deleteTask(element.id)">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </td>
@@ -50,9 +53,11 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+
+            <mat-paginator class="monochrome-paginator" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar página" showFirstLastButtons></mat-paginator>
         </div>
         } @else {
-        <div class="empty-state mt-3">
+        <div class="empty-state-mono mt-3">
             <mat-icon>assignment</mat-icon>
             <p>No tienes tareas registradas. ¡Crea una nueva!</p>
         </div>

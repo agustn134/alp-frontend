@@ -1,49 +1,38 @@
-import { Injectable } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable, inject, NgZone } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorHandlerService {
-  constructor(private snackBar: MatSnackBar) { }
+  private snackBar = inject(MatSnackBar);
+  private zone = inject(NgZone);
 
-  //?metodo centralizado para mostrar y manejar errores de cualquier tipo
-  public handleError(error: HttpErrorResponse): void {
-    let errorMessage = 'Ocurrió un error inesperado. Inténtalo de nuevo.';
+  handleError(error: any): void {
+    let errorMessage = 'Ocurrió un error inesperado. Intenta de nuevo.';
 
-    if (error.error instanceof ErrorEvent) {
-      //?para los errores del lado del cliente
-      errorMessage = `Error de conexión: ${error.error.message}`;
-    } else {
-      //?para los errores del backend
-      if (error.status === 401) errorMessage = 'Credenciales inválidas o sesión expirada.';
-      if (error.status === 403) errorMessage = 'No tienes permiso para realizar esta acción.';
-      if (error.status === 404) errorMessage = 'Recurso no encontrado.';
-      if (error.error && error.error.message) {
-        //?si la api manda un mensaje específico, lo usamos si nó usamos el mensaje de error que viene en el error
-        const backendMsg = error.error.message;
-
-        if (typeof backendMsg === 'string') {
-          errorMessage = backendMsg;
-        } else if (backendMsg.message && Array.isArray(backendMsg.message)) {
-          errorMessage = backendMsg.message[0];
-        } else if (backendMsg.message && typeof backendMsg.message === 'string') {
-          errorMessage = backendMsg.message;
-        }
-      }
+    if (error.error && error.error.message) {
+      errorMessage = Array.isArray(error.error.message)
+        ? error.error.message.join(' | ')
+        : error.error.message;
+    }
+    else if (error.status === 401) {
+      errorMessage = 'Tu sesión ha expirado o las credenciales son incorrectas.';
+    } else if (error.status === 403) {
+      errorMessage = 'No tienes los permisos necesarios para ver esto.';
+    } else if (error.status === 404) {
+      errorMessage = 'El recurso que buscas no existe.';
+    } else if (error.status === 500) {
+      errorMessage = 'Error interno del servidor. Repórtalo al administrador.';
     }
 
-    this.showError(errorMessage);
-  }
-
-  private showError(message: string): void {
-    //?uso el snackbar de Material Design para mostrar el error elegantemente
-    this.snackBar.open(message, 'Cerrar', {
-      duration: 5000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      panelClass: ['error-snackbar'] //?clase de estilo rojo  solo apariencia
+    this.zone.run(() => {
+      this.snackBar.open(errorMessage, 'Cerrar', {
+        duration: 6000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['error-snackbar']
+      });
     });
   }
 }
