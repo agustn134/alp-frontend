@@ -6,12 +6,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root'
 })
 export class ErrorHandlerService {
-
-  //?Este we es mas que nada pa MANEJAR ERRORES QUE VIENEN DEL SERVIDOR
-  //?lit, solo mostrar MENSAJES GENERICOS y no mostrar rutas de carpetas del servidor al usuario final
-  //?y que no se vea tan feo el error jeje
-
-
   constructor(private snackBar: MatSnackBar) { }
 
   //?metodo centralizado para mostrar y manejar errores de cualquier tipo
@@ -28,7 +22,15 @@ export class ErrorHandlerService {
       if (error.status === 404) errorMessage = 'Recurso no encontrado.';
       if (error.error && error.error.message) {
         //?si la api manda un mensaje específico, lo usamos si nó usamos el mensaje de error que viene en el error
-        errorMessage = error.error.message;
+        const backendMsg = error.error.message;
+
+        if (typeof backendMsg === 'string') {
+          errorMessage = backendMsg;
+        } else if (backendMsg.message && Array.isArray(backendMsg.message)) {
+          errorMessage = backendMsg.message[0];
+        } else if (backendMsg.message && typeof backendMsg.message === 'string') {
+          errorMessage = backendMsg.message;
+        }
       }
     }
 

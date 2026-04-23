@@ -1,24 +1,30 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/auth';  //para el LOGIN
-  private userUrl = 'http://localhost:3000/api/user'; //para obtener los datos del USUARIO
+  private apiUrl = environment.apiUrl;  //para el LOGIN
+  private userUrl = environment.userUrl; //para obtener los datos del USUARIO
+
+  private currentUserSubject = new BehaviorSubject<boolean>(false);
+  public isLoggedIn$ = this.currentUserSubject.asObservable();
+
+  // Or if the user exactly referred to `isLoggedIn` as a behavior subject:
+  public isLoggedIn = new BehaviorSubject<boolean>(false);
 
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
+    return this.http.post(`${this.apiUrl}/login`, credentials, {
+      withCredentials: true
+    }).pipe(
       tap((response: any) => {
-        //?guardamos los tokens en memoria de sesión por seguridad
-        if (response && response.access_token) {
-          sessionStorage.setItem('access_token', response.access_token);
-          sessionStorage.setItem('refresh_token', response.refresh_token);
-        }
+        this.currentUserSubject.next(true);
+        this.isLoggedIn.next(true);
       })
     );
   }
