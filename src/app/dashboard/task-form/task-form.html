@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>{{ data ? 'Editar Tarea' : 'Nueva Tarea' }}</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="taskForm" id="taskForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre de la tarea</mat-label>
+            <input matInput formControlName="name">
+            @if (taskForm.get('name')?.hasError('required') && taskForm.get('name')?.touched) {
+            <mat-error>El nombre es obligatorio</mat-error>
+            }
+            @if (taskForm.get('name')?.hasError('minlength')) {
+            <mat-error>Mínimo 3 caracteres</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="description" rows="3"></textarea>
+            @if (taskForm.get('description')?.hasError('required') && taskForm.get('description')?.touched) {
+            <mat-error>La descripción es obligatoria</mat-error>
+            }
+            @if (taskForm.get('description')?.hasError('minlength')) {
+            <mat-error>Mínimo 10 caracteres</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Prioridad</mat-label>
+            <mat-select formControlName="priority">
+                <mat-option [value]="false">Normal</mat-option>
+                <mat-option [value]="true">Alta</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-flat-button color="primary" type="submit" form="taskForm" [disabled]="taskForm.invalid">
+        Guardar
+    </button>
+</mat-dialog-actions>

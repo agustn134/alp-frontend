@@ -1,0 +1,51 @@
+.task-card {
+    margin-top: 20px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 15px;
+}
+
+table {
+    width: 100%;
+    min-width: 700px;
+}
+
+.mt-3 {
+    margin-top: 20px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+
+    mat-icon {
+        font-size: 48px;
+        height: 48px;
+        width: 48px;
+        margin-bottom: 15px;
+        color: #ccc;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-header mat-card-title {
+        font-size: 18px;
+    }
+}
