@@ -27,8 +27,8 @@ export class TaskForm implements OnInit {
   ngOnInit(): void {
     //?comienzo del formulario con las validaciones del backend, el CreateTaskDto en C:\ProyectosDom\alp-api\src\modules\task\dto\create-task.dto.ts
     this.taskForm = this.fb.group({
-      name: [this.data?.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      description: [this.data?.description || '', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      name: [this.data?.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(100), Validators.pattern(/.*\S.*/)]],
+      description: [this.data?.description || '', [Validators.required, Validators.minLength(10), Validators.maxLength(500), Validators.pattern(/.*\S.*/)]],
       priority: [this.data ? this.data.priority : false, [Validators.required]] //? dejo false por defecto
     });
   }
