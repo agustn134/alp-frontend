@@ -9,13 +9,12 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;  //para el LOGIN
-  private userUrl = environment.userUrl; //para obtener los datos del USUARIO
+  private apiUrl = environment.apiUrl;
+  private userUrl = environment.userUrl;
 
   private currentUserSubject = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this.currentUserSubject.asObservable();
 
-  // Or if the user exactly referred to `isLoggedIn` as a behavior subject:
   public isLoggedIn = new BehaviorSubject<boolean>(false);
 
   login(credentials: any): Observable<any> {
@@ -34,10 +33,13 @@ export class AuthService {
   }
 
   getMe(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/me`); //?el interceptor se encarga de mandar el token
+    return this.http.get(`${this.apiUrl}/me`);
   }
 
   logout(): void {
     sessionStorage.clear();
+    //borramos la sesión en memoria
+    this.currentUserSubject.next(false);
+    this.isLoggedIn.next(false);
   }
 }

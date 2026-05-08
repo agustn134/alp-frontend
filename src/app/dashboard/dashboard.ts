@@ -1,16 +1,11 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { AuthService } from '../core/services/auth.service.ts';
+import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { TaskList } from './task-list/task-list.js';
-import { AuditLogs } from "./audit-logs/audit-logs";
-import { UserManagement } from "./user-management/user-management";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MatToolbarModule, MatButtonModule, MatCardModule, TaskList, AuditLogs, UserManagement],
+  imports: [TaskList],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

@@ -1,12 +1,12 @@
 import { Injectable, inject, NgZone } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Toast } from './toast';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorHandlerService {
-  private snackBar = inject(MatSnackBar);
   private zone = inject(NgZone);
+  private toast = inject(Toast);
 
   handleError(error: any): void {
     let errorMessage = 'Ocurrió un error inesperado. Intenta de nuevo.';
@@ -27,12 +27,7 @@ export class ErrorHandlerService {
     }
 
     this.zone.run(() => {
-      this.snackBar.open(errorMessage, 'Cerrar', {
-        duration: 6000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-        panelClass: ['error-snackbar']
-      });
+      this.toast.showError(errorMessage);
     });
   }
 }

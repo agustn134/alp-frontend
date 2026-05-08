@@ -1,48 +1,57 @@
 <div class="login-container">
-    <mat-card class="login-card">
-        <mat-card-header>
-            <mat-card-title>Iniciar Sesión</mat-card-title>
-            <mat-card-subtitle>Ingresa tus credenciales</mat-card-subtitle>
-        </mat-card-header>
+    <main class="form-signin w-100 m-auto">
 
-        <mat-card-content>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form #loginForm="ngForm" (ngSubmit)="onLogin()">
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Usuario</mat-label>
-                    <input matInput formControlName="username" placeholder="Ej. Usuario1">
-                    <mat-icon matSuffix>person</mat-icon>
+            <h1 class="h3 mb-4 fw-normal text-center">Iniciar sesión</h1>
 
-                    @if (loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched) {
-                    <mat-error>El usuario es obligatorio</mat-error>
-                    }
-                    @if (loginForm.get('username')?.hasError('minlength')) {
-                    <mat-error>Mínimo 3 caracteres</mat-error>
-                    }
-                </mat-form-field>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Usuario" name="username"
+                    [(ngModel)]="loginData.username" required maxlength="100" pattern="^\S+$" #username="ngModel"
+                    [class.is-invalid]="username.invalid && username.touched">
+                <label for="floatingInput">Usuario</label>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-                    <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
-                        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-
-                    @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
-                    <mat-error>La contraseña es obligatoria</mat-error>
-                    }
-                </mat-form-field>
-
-                <button mat-flat-button color="primary" class="full-width mt-3" type="submit"
-                    [disabled]="loginForm.invalid">
-                    Entrar
-                </button>
-                <div class="text-center mt-3" style="text-align: center; margin-top: 20px;">
-                    <a routerLink="/register" style="color: #3f51b5; text-decoration: none;">¿No tienes cuenta?
-                        Regístrate aquí</a>
+                <div class="invalid-feedback text-start mb-2" *ngIf="username.invalid && username.touched">
+                    <span *ngIf="username.errors?.['required']">El usuario es obligatorio.<br></span>
+                    <span *ngIf="username.errors?.['pattern']">El usuario no puede contener espacios en
+                        blanco.<br></span>
+                    <span *ngIf="username.errors?.['maxlength']">El usuario no puede exceder los 100 caracteres.</span>
                 </div>
+            </div>
 
-            </form>
-        </mat-card-content>
-    </mat-card>
+            <div class="form-floating position-relative">
+                <input [type]="hidePassword ? 'password' : 'text'" class="form-control" id="floatingPassword"
+                    placeholder="Password" name="password" [(ngModel)]="loginData.password" required minlength="8"
+                    pattern="^(?=.*[A-Z])(?=.*[\W_]).*$" #pass="ngModel"
+                    [class.is-invalid]="pass.invalid && pass.touched">
+                <label for="floatingPassword">Contraseña</label>
+
+                <button type="button"
+                    class="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
+                    (click)="hidePassword = !hidePassword" style="z-index: 10;">
+                    {{ hidePassword ? 'Mostrar' : 'Ocultar' }}
+                </button>
+
+                <div class="invalid-feedback text-start" *ngIf="pass.invalid && pass.touched">
+                    <span *ngIf="pass.errors?.['required']">La contraseña es obligatoria.<br></span>
+                    <span *ngIf="pass.errors?.['minlength']">Debe tener al menos 8 caracteres.<br></span>
+                    <span *ngIf="pass.errors?.['pattern']">Debe incluir al menos una mayúscula y un carácter especial
+                        (ej. @, #, !).</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary w-100 py-2 mt-3" type="submit" [disabled]="loginForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"
+                    aria-hidden="true"></span>
+                {{ isLoading ? 'Iniciando...' : 'Entrar' }}
+            </button>
+
+            <div class="text-center mt-3">
+                <a routerLink="/register" class="text-decoration-none">¿No tienes cuenta? Regístrate</a>
+            </div>
+
+            <p class="mt-5 mb-3 text-body-secondary text-center">&copy; 2026</p>
+        </form>
+
+    </main>
 </div>

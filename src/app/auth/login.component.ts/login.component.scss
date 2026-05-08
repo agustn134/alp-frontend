@@ -1,22 +1,29 @@
+/* Agregamos una altura al contenedor para centrarlo verticalmente */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    display: flex;
+    align-items: center;
     background-color: #f5f5f5;
 }
 
-.login-card {
-    width: 100%;
-    max-width: 400px;
+/* Código directo del sign-in.css de Bootstrap */
+.form-signin {
+    max-width: 330px;
+    padding: 1rem;
 }
 
-.full-width {
-    width: 100%;
-    margin-top: 15px;
+.form-signin .form-floating:focus-within {
+    z-index: 2;
 }
 
-.mt-3 {
-    margin-top: 20px;
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
