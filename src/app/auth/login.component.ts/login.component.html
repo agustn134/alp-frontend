@@ -1,57 +1,70 @@
 <div class="login-container">
-    <main class="form-signin w-100 m-auto">
+    <main class="form-signin m-auto">
 
-        <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+        <div class="card-login">
+            <form #loginForm="ngForm" (ngSubmit)="onLogin()">
 
-            <h1 class="h3 mb-4 fw-normal text-center">Iniciar sesión</h1>
+                <h1 class="h3 mb-4 fw-normal text-center">Iniciar sesión</h1>
 
-            <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="Usuario" name="username"
-                    [(ngModel)]="loginData.username" required maxlength="100" pattern="^\S+$" #username="ngModel"
-                    [class.is-invalid]="username.invalid && username.touched">
-                <label for="floatingInput">Usuario</label>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Usuario" name="username"
+                            [(ngModel)]="loginData.username" required maxlength="100" pattern="^\S+$"
+                            #username="ngModel" [class.is-invalid]="username.invalid && username.touched">
+                        <label for="floatingInput">Usuario</label>
+                    </div>
 
-                <div class="invalid-feedback text-start mb-2" *ngIf="username.invalid && username.touched">
-                    <span *ngIf="username.errors?.['required']">El usuario es obligatorio.<br></span>
-                    <span *ngIf="username.errors?.['pattern']">El usuario no puede contener espacios en
-                        blanco.<br></span>
-                    <span *ngIf="username.errors?.['maxlength']">El usuario no puede exceder los 100 caracteres.</span>
+                    <div class="text-danger small text-start mt-1"
+                        *ngIf="username.invalid && (username.touched || loginForm.submitted)">
+                        <span *ngIf="username.errors?.['required']">El usuario es obligatorio.<br></span>
+                        <span *ngIf="username.errors?.['pattern']">El usuario no puede contener espacios en
+                            blanco.<br></span>
+                        <span *ngIf="username.errors?.['maxlength']">El usuario no puede exceder los 100
+                            caracteres.</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-floating position-relative">
-                <input [type]="hidePassword ? 'password' : 'text'" class="form-control" id="floatingPassword"
-                    placeholder="Password" name="password" [(ngModel)]="loginData.password" required minlength="8"
-                    pattern="^(?=.*[A-Z])(?=.*[\W_]).*$" #pass="ngModel"
-                    [class.is-invalid]="pass.invalid && pass.touched">
-                <label for="floatingPassword">Contraseña</label>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <div class="form-floating">
+                            <input [type]="hidePassword ? 'password' : 'text'" class="form-control"
+                                id="floatingPassword" placeholder="Password" name="password"
+                                [(ngModel)]="loginData.password" required minlength="8"
+                                pattern="^(?=.*[A-Z])(?=.*[\W_]).*$" #pass="ngModel"
+                                [class.is-invalid]="pass.invalid && (pass.touched || loginForm.submitted)"
+                                aria-describedby="passwordHelpBlock">
+                            <label for="floatingPassword">Contraseña</label>
+                        </div>
 
-                <button type="button"
-                    class="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
-                    (click)="hidePassword = !hidePassword" style="z-index: 10;">
-                    {{ hidePassword ? 'Mostrar' : 'Ocultar' }}
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center px-3"
+                            type="button" (click)="hidePassword = !hidePassword"
+                            style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                            <i class="bi" [ngClass]="hidePassword ? 'bi-eye' : 'bi-eye-slash'"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-danger small text-start mt-1"
+                        *ngIf="pass.invalid && (pass.touched || loginForm.submitted)">
+                        <span *ngIf="pass.errors?.['required']">La contraseña es obligatoria.<br></span>
+                        <span *ngIf="pass.errors?.['minlength']">Debe tener al menos 8 caracteres.<br></span>
+                        <span *ngIf="pass.errors?.['pattern']">Falta una mayúscula o un carácter especial.</span>
+                    </div>
+
+                    <div id="passwordHelpBlock" class="form-text text-start mt-1">
+                        Tu contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter
+                        especial (ej. @, #, !).
+                    </div>
+                </div>
+
+                <button class="btn btn-primary w-100 py-2 mt-4" type="submit">
+                    Entrar
                 </button>
 
-                <div class="invalid-feedback text-start" *ngIf="pass.invalid && pass.touched">
-                    <span *ngIf="pass.errors?.['required']">La contraseña es obligatoria.<br></span>
-                    <span *ngIf="pass.errors?.['minlength']">Debe tener al menos 8 caracteres.<br></span>
-                    <span *ngIf="pass.errors?.['pattern']">Debe incluir al menos una mayúscula y un carácter especial
-                        (ej. @, #, !).</span>
+                <div class="text-center mt-3">
+                    <a routerLink="/register" class="text-decoration-none">¿No tienes cuenta? Regístrate</a>
                 </div>
-            </div>
-
-            <button class="btn btn-primary w-100 py-2 mt-3" type="submit" [disabled]="loginForm.invalid || isLoading">
-                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"
-                    aria-hidden="true"></span>
-                {{ isLoading ? 'Iniciando...' : 'Entrar' }}
-            </button>
-
-            <div class="text-center mt-3">
-                <a routerLink="/register" class="text-decoration-none">¿No tienes cuenta? Regístrate</a>
-            </div>
-
-            <p class="mt-5 mb-3 text-body-secondary text-center">&copy; 2026</p>
-        </form>
+            </form>
+        </div>
 
     </main>
 </div>

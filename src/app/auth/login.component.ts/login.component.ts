@@ -1,10 +1,8 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { Toast } from '../../core/services/toast';
-
 
 @Component({
   selector: 'app-login',
@@ -13,29 +11,30 @@ import { Toast } from '../../core/services/toast';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  loginData = { username: '', password: '' };
 
-  isLoading = false;
+export class LoginComponent {
+  @ViewChild('loginForm') loginForm!: NgForm;
+  loginData = { username: '', password: '' };
   hidePassword = true;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toastservice: Toast,
+    private zone: NgZone
   ) { }
 
   onLogin() {
-    this.isLoading = true;
+    if (this.loginForm.invalid) {
+      return;
+    }
+
     this.authService.login(this.loginData).subscribe({
       next: () => {
-        ////toast verde de éxito
-        this.isLoading = false;
-        this.toastservice.showSuccess('¡Inicio de sesión correcto!');
-        this.router.navigate(['/dashboard']);
+        this.zone.run(() => {
+          this.router.navigate(['/dashboard']);
+        });
       },
       error: () => {
-        this.isLoading = false;
       }
     });
   }

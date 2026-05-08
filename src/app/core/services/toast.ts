@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 
 export interface ToastInfo {
   message: string;
@@ -9,14 +9,18 @@ export interface ToastInfo {
   providedIn: 'root',
 })
 export class Toast {
+  private zone = inject(NgZone);
   toasts: ToastInfo[] = [];
   show(message: string, options: any = {}) {
-    const toast: ToastInfo = { message, delay: 5000, ...options };
-    this.toasts.push(toast);
+    this.zone.run(() => {
+      const toast: ToastInfo = { message, delay: 3000, ...options };
+      this.toasts.push(toast);
 
-    if (toast.delay) {
-      setTimeout(() => this.remove(toast), toast.delay);
-    }
+      if (toast.delay) {
+        setTimeout(() => this.remove(toast), toast.delay);
+      }
+
+    });
   }
   showSuccess(message: string) {
     this.show(message, { classname: 'text-bg-success' });
