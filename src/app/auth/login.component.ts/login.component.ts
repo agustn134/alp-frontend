@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { Toast } from '../../core/services/toast';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private zone: NgZone
+    private zone: NgZone,
+    private toastService: Toast
   ) { }
 
   onLogin() {
@@ -31,6 +33,7 @@ export class LoginComponent {
     this.authService.login(this.loginData).subscribe({
       next: () => {
         this.zone.run(() => {
+          this.toastService.showSuccess('¡Bienvenido de nuevo!');
           this.router.navigate(['/dashboard']);
         });
       },
