@@ -1,0 +1,65 @@
+<app-navbar></app-navbar>
+
+<main>
+    <section class="position-relative text-center overflow-hidden">
+
+        <div id="carouselExampleCaptions" class="carousel slide position-absolute w-100 h-100"
+            style="top: 0; left: 0; z-index: 0;">
+
+            <div class="carousel-inner h-100">
+                <div class="carousel-item h-100" [class.active]="activeSlide === 0">
+                    <img src="https://picsum.photos/1920/1080?random=1" class="d-block w-100 h-100 carousel-bg-img">
+                </div>
+                <div class="carousel-item h-100" [class.active]="activeSlide === 1">
+                    <img src="https://picsum.photos/1920/1080?random=2" class="d-block w-100 h-100 carousel-bg-img">
+                </div>
+                <div class="carousel-item h-100" [class.active]="activeSlide === 2">
+                    <img src="https://picsum.photos/1920/1080?random=3" class="d-block w-100 h-100 carousel-bg-img">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" (click)="prevSlide()">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" (click)="nextSlide()">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">siguiente</span>
+            </button>
+        </div>
+
+        <div class="container position-relative py-5" style="z-index: 1;">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto text-white">
+                    <h1 class="fw-bold text-shadow">Hola de nuevo, {{user?.username}} !</h1>
+                    <p class="lead text-white-50 text-shadow">
+                        Bienvenido a tu área de trabajo. Aquí puedes gestionar tus tareas y proyectos.
+                    </p>
+                    <p class="mt-4">
+                        <a class="btn btn-primary my-2 me-2" (click)="navegar('dashboard/tareas')"
+                            style="cursor: pointer;">Crear Nueva Tarea</a>
+                        <a class="btn btn-light my-2" (click)="navegar('dashboard/tareas')"
+                            style="cursor: pointer;">Gestionar Tareas</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+
+</main>
+
+<footer class="text-body-secondary py-5">
+    <div class="container">
+
+        <p class="float-end mb-1">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-door-closed-fill" viewBox="0 0 16 16">
+                <path
+                    d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+            </svg><a (click)="onLogout()">Cerrar Sesión</a>
+        </p>
+    </div>
+</footer>

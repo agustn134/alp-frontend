@@ -1,100 +1,154 @@
-import { Component, inject, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TaskService, Task } from '../../core/services/task';
 import { CommonModule } from '@angular/common';
+import { Navbar } from "../../shared/components/navbar/navbar";
 import { TaskForm } from '../task-form/task-form';
-
+import { Toast } from '../../core/services/toast';
 
 @Component({
   selector: 'app-task-list',
   imports: [
-    CommonModule, TaskForm
+    CommonModule,
+    Navbar,
+    TaskForm
   ],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
 export class TaskList implements OnInit {
   private taskService = inject(TaskService);
+  private toastService = inject(Toast);
+  private cdr = inject(ChangeDetectorRef);
 
-  tasks: Task[] = [];
-  filteredTasks: Task[] = [];
-
+  tareas: any[] = [];
+  filtrodetareas: Task[] = [];
+  tareaSeleccionada: Task | null = null;
   showModal = false;
-  selectedTask: Task | null = null;
 
-  filterValues = {
-    text: '',
-    priority: 'ALL'
+  mostrarModalEliminar = false;
+  idTareaAEliminar: number | null = null;
+
+  valoresFiltro = {
+    texto: '',
+    prioridad: 'TODAS'
   };
 
   ngOnInit() {
-    this.loadTasks();
+    this.cargarTareas();
   }
 
-  loadTasks() {
+  cargarTareas() {
     this.taskService.getTasks().subscribe({
       next: (data) => {
-        this.tasks = data;
-        this.applyFilters();
+        this.tareas = data;
+        this.aplicarFiltros();
+        this.cdr.detectChanges();
+      }, error: (err) => {
+        console.error("Error al cargar tareas:", err);
       }
     });
   }
 
-
-
-  applyTextFilter(event: Event) {
-    this.filterValues.text = (event.target as HTMLInputElement).value;
-    this.applyFilters();
+  aplicarFiltrotextoo(event: Event) {
+    this.valoresFiltro.texto = (event.target as HTMLInputElement).value;
+    this.aplicarFiltros();
   }
 
-  applyPriorityFilter(value: string) {
-    this.filterValues.priority = value;
-    this.applyFilters();
+  aplicarFiltroPrioridad(value: string) {
+    this.valoresFiltro.prioridad = value;
+    this.aplicarFiltros();
   }
 
 
-  applyFilters() {
-    this.filteredTasks = this.tasks.filter(task => {
-      let priorityMatch = true;
-      if (this.filterValues.priority !== 'ALL') {
-        const isHigh = this.filterValues.priority === 'TRUE';
-        priorityMatch = task.priority === isHigh;
+  aplicarFiltros() {
+    this.filtrodetareas = this.tareas.filter(tarea => {
+
+      let coincidenciaPrioridad = true;
+      if (this.valoresFiltro.prioridad !== 'TODAS') {
+        const esAlta = this.valoresFiltro.prioridad === 'TRUE';
+        coincidenciaPrioridad = tarea.priority === esAlta;
       }
 
-      let textMatch = true;
-      if (this.filterValues.text) {
-        const searchString = `${task.name} ${task.description}`.toLowerCase();
-        textMatch = searchString.includes(this.filterValues.text.toLowerCase());
+      let coincidenciaTexto = true;
+      if (this.valoresFiltro.texto) {
+        const nombre = tarea.name || '';
+        const descripcion = tarea.description || '';
+        const textoABuscar = `${nombre} ${descripcion}`.toLowerCase();
+        coincidenciaTexto = textoABuscar.includes(this.valoresFiltro.texto.toLowerCase());
       }
 
-      return priorityMatch && textMatch;
+      return coincidenciaPrioridad && coincidenciaTexto;
     });
   }
 
-  deleteTask(id: number) {
-    if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
-      this.taskService.deleteTask(id).subscribe({
+  getLineasDescripcion(descripcion: string): string[] {
+    return descripcion ? descripcion.split('\n') : [];
+  }
+
+  palancaSubtarea(tarea: Task, index: number, event: Event) {
+    const estaMarcado = (event.target as HTMLInputElement).checked;
+    const lineas = tarea.description.split('\n');
+    let linea = lineas[index];
+    //si esta marcado el checkbox rnyonvrd reemplazar - [ ] por - [x] y si no esta marcado reemplazar - [x] por - [ ]
+    if (estaMarcado) {
+      linea = linea.replace(/-\s*\[\s*\]/, '- [x]');
+    } else {
+      linea = linea.replace(/-\s*\[[xX]\]/, '- [ ]');
+    }
+
+    lineas[index] = linea;
+    tarea.description = lineas.join('\n');
+
+    this.taskService.updateTask(tarea.id!, { description: tarea.description }).subscribe({
+      error: () => {
+        this.toastService.showError('Error al guardar la subtarea');
+        this.cargarTareas();
+      }
+    });
+  }
+
+  abrirModalEliminar(id: number | undefined) {
+    if (id === undefined) return;
+    this.idTareaAEliminar = id;
+    this.mostrarModalEliminar = true;
+  }
+
+  cerrarModalEliminar() {
+    this.mostrarModalEliminar = false;
+    this.idTareaAEliminar = null;
+  }
+
+  confirmarEliminacion() {
+    if (this.idTareaAEliminar !== null) {
+      this.taskService.deleteTask(this.idTareaAEliminar).subscribe({
         next: () => {
-          this.loadTasks();
+          this.toastService.showSuccess('Tarea eliminada correctamente');
+          this.cargarTareas();
+          this.cerrarModalEliminar();
+        },
+        error: (err) => {
+          console.error("Error al eliminar la tarea:", err);
+          this.cerrarModalEliminar();
         }
       });
     }
   }
 
-  openCreateTask() {
-    this.selectedTask = null;
+  abrirNuevaTarea() {
+    this.tareaSeleccionada = null;
     this.showModal = true;
   }
 
-  openEditTask(task: Task) {
-    this.selectedTask = task;
+  abrirEditarTarea(tarea: Task) {
+    this.tareaSeleccionada = tarea;
     this.showModal = true;
   }
 
   closeModal(reload: boolean) {
     this.showModal = false;
-    this.selectedTask = null;
+    this.tareaSeleccionada = null;
     if (reload) {
-      this.loadTasks();
+      this.cargarTareas();
     }
   }
 }

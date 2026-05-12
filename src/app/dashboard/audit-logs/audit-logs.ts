@@ -3,13 +3,15 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuditService } from '../../core/services/audit';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { Navbar } from "../../shared/components/navbar/navbar";
 
 
 @Component({
   selector: 'app-audit-logs',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule
+    CommonModule, ReactiveFormsModule,
+    Navbar
   ],
   templateUrl: './audit-logs.html',
   styleUrl: './audit-logs.scss'
@@ -34,7 +36,6 @@ export class AuditLogs implements OnInit {
   ngOnInit() {
     this.authSvc.getMe().subscribe({
       next: (user) => {
-        //si el usuario es administrador
         this.isAdmin = user.role === 'ADMIN';
         this.cdr.detectChanges();
         this.loadLogs();

@@ -7,18 +7,26 @@ import { Toast } from '../../../core/services/toast';
   imports: [CommonModule],
   template: ` 
   <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
+      
       <div *ngFor="let toast of toastService.toasts"
-           class="toast show align-items-center border-0 mb-2 {{ toast.classname }}"
-           role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-          <div class="toast-body">
-            {{ toast.message }}
-          </div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" 
-                  aria-label="Close" (click)="toastService.remove(toast)"></button>
+           class="toast show border-0 mb-2 {{ toast.classname }}"
+           role="alert" aria-live="assertive" aria-atomic="true" data-bs-theme="light">
+        
+        <div class="toast-header border-bottom border-light border-opacity-25 bg-transparent text-white">
+          <i class="bi bi-bell-fill me-2"></i>
+          <strong class="me-auto">Sistema</strong>
+          <small>Justo ahora</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" 
+                  (click)="toastService.remove(toast)"></button>
         </div>
+        
+        <div class="toast-body">
+          {{ toast.message }}
+        </div>
+        
       </div>
-    </div>
+
+  </div>
      `,
   styles: ``,
 })

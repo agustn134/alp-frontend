@@ -1,8 +1,11 @@
 .carousel-bg-img {
     object-fit: cover;
+    /* Hace que la imagen cubra todo el espacio sin aplastarse */
     filter: brightness(0.35);
+    /* Oscurece la imagen un 65% para que el texto blanco se lea perfecto */
 }
 
+/* Opcional: Sombra sutil al texto para que resalte aún más sobre cualquier foto */
 .text-shadow {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
