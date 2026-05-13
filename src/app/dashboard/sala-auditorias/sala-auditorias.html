@@ -1,106 +1,256 @@
 <app-navbar></app-navbar>
 
 <div class="nav-scroller bg-body shadow-sm">
-    <nav class="nav" aria-label="Secondary navigation">
-        <a class="nav-link active" aria-current="page" href="#">Panel General</a>
-        <a class="nav-link" href="#">
-            Usuarios Activos
-            <span class="badge text-bg-light rounded-pill align-text-bottom">27</span>
+    <nav class="nav px-3" aria-label="Secondary navigation">
+        <a class="nav-link" [class.active]="vistaActual === 'panel'" (click)="cambiarVista('panel', $event)"
+            href="#">Panel General</a>
+
+        <a class="nav-link" [class.active]="vistaActual === 'usuarios'" (click)="cambiarVista('usuarios', $event)"
+            *ngIf="esAdmin" href="#">
+            Lista de usuarios
         </a>
-        <a class="nav-link" href="#">Roles y Permisos</a>
-        <a class="nav-link" href="#">Reportes de Auditoría</a>
+
+        <a class="nav-link" [class.active]="vistaActual === 'reportes'" (click)="cambiarVista('reportes', $event)"
+            href="#">Historial de auditoría</a>
     </nav>
 </div>
 
-<main class="container">
-    <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+<main class="container pb-5">
+
+    <div class="d-flex align-items-center p-3 my-3 text-white bg-dark rounded shadow-sm">
         <div class="lh-1">
             <h1 class="h5 mb-0 text-white lh-1">Sala de Auditorías</h1>
-            <small>Gestión de Usuarios y Seguridad del Sistema</small>
+            <small>{{ esAdmin ? 'Historial de Actividad en el Sistema' : 'Tu Historial de Actividad' }}</small>
         </div>
     </div>
 
-    <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h6 class="border-bottom pb-2 mb-0">Directorio de Usuarios</h6>
 
-        <div class="d-flex text-body-secondary pt-3">
-            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
-                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
-                preserveAspectRatio="xMidYMid slice" focusable="false">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#007bff"></rect>
-                <text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text>
-            </svg>
-            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                <div class="d-flex justify-content-between">
-                    <strong class="text-gray-dark">Carlos Mendoza</strong>
-                    <a href="#" class="text-decoration-none">Administrar</a>
+    <div class="my-3 p-3 bg-body rounded shadow-sm"
+        *ngIf="!cargando && esAdmin && (vistaActual === 'panel' || vistaActual === 'usuarios')">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+            <h6 class="mb-0">Directorio de Usuarios</h6>
+
+            <div class="d-flex gap-2">
+                <div class="input-group" style="max-width: 200px;">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control form-control-sm" placeholder="Buscar..."
+                        [(ngModel)]="filtroUsuarios" (input)="paginaUsuarios = 1">
                 </div>
-                <span class="d-block">@carlosm_dev - Rol: Administrador</span>
+                <select class="form-select form-select-sm" style="max-width: 150px;" [(ngModel)]="filtroRol"
+                    (change)="paginaUsuarios = 1">
+                    <option value="TODOS">Todos los roles</option>
+                    <option value="ADMIN">Administradores</option>
+                    <option value="USER">Usuarios Normales</option>
+                </select>
             </div>
         </div>
 
-        <div class="d-flex text-body-secondary pt-3">
-            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
-                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
-                preserveAspectRatio="xMidYMid slice" focusable="false">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#e83e8c"></rect>
-                <text x="50%" y="50%" fill="#e83e8c" dy=".3em">32x32</text>
-            </svg>
+        <div class="text-center text-muted py-4" *ngIf="usuariosFiltradosPaginados.length === 0">
+            <i class="bi bi-people fs-1"></i>
+            <p>No se encontraron usuarios con esos filtros.</p>
+        </div>
+
+        <div class="d-flex text-body-secondary pt-3" *ngFor="let usuario of usuariosFiltradosPaginados">
+            <i class="bi bi-person-circle fs-1 text-black me-3"></i>
+
             <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                <div class="d-flex justify-content-between">
-                    <strong class="text-gray-dark">Ana López</strong>
-                    <a href="#" class="text-decoration-none">Administrar</a>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <strong class="text-gray-dark fs-6">{{ usuario.name }} {{ usuario.lastname }}</strong>
+                        <span class="badge ms-2" [ngClass]="usuario.role === 'ADMIN' ? 'bg-primary' : 'bg-secondary'">
+                            {{ usuario.role }}
+                        </span>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-sm"
+                            [ngClass]="usuario.role === 'ADMIN' ? 'btn-dark' : 'btn-outline-dark'"
+                            [disabled]="usuario.id === usuarioActual.id"
+                            title="{{ usuario.role === 'ADMIN' ? 'Degradar a Usuario Normal' : 'Promover a Administrador' }}"
+                            (click)="cambiarRolUsuario(usuario)">
+                            <i class="bi"
+                                [ngClass]="usuario.role === 'ADMIN' ? 'bi-caret-down-square' : 'bi-caret-up-square'"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" title="Resetear Contraseña"
+                            (click)="abrirModalReset(usuario)">
+                            <i class="bi bi-unlock2-fill"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" [disabled]="usuario.id === usuarioActual.id"
+                            title="{{ usuario.id === usuarioActual.id ? 'No puedes eliminar tu propia cuenta' : 'Eliminar Usuario' }}"
+                            (click)="abrirModalEliminarUsuario(usuario)">
+                            <i class="bi bi-trash2"></i>
+                        </button>
+                    </div>
                 </div>
-                <span class="d-block">@analopez - Rol: Usuario Regular</span>
+                <span class="d-block text-muted mt-1">
+                    ID: {{ usuario.id }} | <strong> @{{ usuario.username }}</strong> | Creado el día: {{
+                    usuario.created_at | date:'shortDate' }}
+                </span>
             </div>
         </div>
 
-        <div class="d-flex text-body-secondary pt-3">
-            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
-                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
-                preserveAspectRatio="xMidYMid slice" focusable="false">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#28a745"></rect>
-                <text x="50%" y="50%" fill="#28a745" dy=".3em">32x32</text>
-            </svg>
-            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                <div class="d-flex justify-content-between">
-                    <strong class="text-gray-dark">Roberto García</strong>
-                    <a href="#" class="text-decoration-none text-danger">Bloquear</a>
-                </div>
-                <span class="d-block">@rgarcia99 - Rol: Auditor Externo</span>
-            </div>
-        </div>
+        <nav class="mt-4" *ngIf="totalPaginasUsuarios > 1">
+            <ul class="pagination justify-content-center mb-0">
+                <li class="page-item" [class.disabled]="paginaUsuarios === 1">
+                    <a class="page-link" href="#"
+                        (click)="cambiarPaginaUsuarios(paginaUsuarios - 1, $event)">&laquo;</a>
+                </li>
 
-        <small class="d-block text-end mt-3">
-            <a href="#">Ver todos los usuarios</a>
-        </small>
+                <li class="page-item"
+                    *ngFor="let elemento of obtenerPaginasVisibles(paginaUsuarios, totalPaginasUsuarios)"
+                    [class.active]="paginaUsuarios === elemento" [class.disabled]="elemento === '...'">
+                    <a class="page-link" href="#" *ngIf="elemento !== '...'"
+                        (click)="cambiarPaginaUsuarios($any(elemento), $event)">{{ elemento }}</a>
+                    <span class="page-link" *ngIf="elemento === '...'">...</span>
+                </li>
+
+                <li class="page-item" [class.disabled]="paginaUsuarios === totalPaginasUsuarios">
+                    <a class="page-link" href="#"
+                        (click)="cambiarPaginaUsuarios(paginaUsuarios + 1, $event)">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
-    <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h6 class="border-bottom pb-2 mb-0">Actividad Reciente del Sistema</h6>
-
-        <div class="d-flex text-body-secondary pt-3">
-            <i class="bi bi-shield-lock-fill text-warning fs-4 me-3"></i>
-            <p class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                <strong class="d-block text-gray-dark">Intento de acceso fallido</strong>
-                Se detectaron múltiples intentos de inicio de sesión fallidos para la cuenta @admin desde la IP
-                192.168.1.45.
-            </p>
+    <div class="my-3 p-3 bg-body rounded shadow-sm"
+        *ngIf="!cargando && (vistaActual === 'panel' || vistaActual === 'reportes')">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+            <h6 class="mb-0">Actividad reciente dentro del sistema</h6>
+            <div class="input-group" style="max-width: 300px;">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control form-control-sm" placeholder="Buscar en logs..."
+                    [(ngModel)]="filtroLogs" (input)="paginaLogs = 1">
+            </div>
         </div>
 
-        <div class="d-flex text-body-secondary pt-3">
-            <i class="bi bi-person-check-fill text-success fs-4 me-3"></i>
-            <p class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                <strong class="d-block text-gray-dark">Nuevo usuario registrado</strong>
-                El usuario @rgarcia99 completó exitosamente su proceso de registro en la plataforma.
-            </p>
+        <div class="text-center text-muted py-4" *ngIf="logsFiltradosPaginados.length === 0">
+            <i class="bi bi-journal-x fs-1"></i>
+            <p>No hay registros que coincidan con la búsqueda.</p>
         </div>
 
-        <small class="d-block text-end mt-3">
-            <a href="#">Exportar Logs</a>
-        </small>
+        <div class="d-flex text-body-secondary pt-3" *ngFor="let log of logsFiltradosPaginados">
+            <i class="fs-3 me-3 mt-1" [ngClass]="obtenerClaseIconoLog(log.severity)"></i>
+
+            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <strong class="text-gray-dark fs-6">{{ log.action }}</strong>
+                    <span class="text-muted" style="font-size: 0.75rem;">{{ log.timestamp | date:'medium' }}</span>
+                </div>
+
+                <p class="mb-1 text-dark">{{ log.error || 'Acción ejecutada correctamente.' }}</p>
+                <span class="text-muted d-block" style="font-size: 0.8rem;">
+                    Ruta: <span class="text-primary font-monospace">{{ log.path || 'N/A' }}</span>
+                    <span *ngIf="log.user_id"> | <strong>Usuario ID: {{ log.user_id }}</strong></span>
+                </span>
+            </div>
+        </div>
+
+        <nav class="mt-4" *ngIf="totalPaginasLogs > 1">
+            <ul class="pagination justify-content-center mb-0">
+                <li class="page-item" [class.disabled]="paginaLogs === 1">
+                    <a class="page-link" href="#" (click)="cambiarPaginaLogs(paginaLogs - 1, $event)">&laquo;</a>
+                </li>
+
+                <li class="page-item" *ngFor="let elemento of obtenerPaginasVisibles(paginaLogs, totalPaginasLogs)"
+                    [class.active]="paginaLogs === elemento" [class.disabled]="elemento === '...'">
+                    <a class="page-link" href="#" *ngIf="elemento !== '...'"
+                        (click)="cambiarPaginaLogs($any(elemento), $event)">{{ elemento }}</a>
+                    <span class="page-link" *ngIf="elemento === '...'">...</span>
+                </li>
+
+                <li class="page-item" [class.disabled]="paginaLogs === totalPaginasLogs">
+                    <a class="page-link" href="#" (click)="cambiarPaginaLogs(paginaLogs + 1, $event)">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+
     </div>
+
 </main>
+
+<div class="modal" tabindex="-1" [class.mostrar]="mostrarModalReset"
+    [style.display]="mostrarModalReset ? 'block' : 'none'"
+    [style.backgroundColor]="mostrarModalReset ? 'rgba(0,0,0,0.6)' : 'transparent'">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-dark text-white border-0">
+                <h5 class="modal-title">Cambiar contraseña</h5>
+                <button type="button" class="btn-close btn-close-white" (click)="cerrarModalReset()"></button>
+            </div>
+
+            <div class="modal-body bg-light mt-2 p-4">
+                <p class="mb-4 text-center">Restablecer contraseña para:<br><span class="fs-5 text-black">@{{
+                        usuarioParaReset?.username }}</span></p>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        <div class="form-floating flex-grow-1">
+                            <input [type]="ocultarContrasenaReset ? 'password' : 'text'" class="form-control"
+                                id="floatingPasswordReset" placeholder="Nueva Contraseña"
+                                [(ngModel)]="nuevaPasswordReset" (input)="validarContrasenaEnTiempo()"
+                                [class.is-invalid]="errorContrasena === 'minlength' || errorContrasena === 'pattern' || errorContrasena === 'required'"
+                                [class.is-valid]="errorContrasena === 'valida'">
+                            <label for="floatingPasswordReset">Nueva Contraseña Segura</label>
+                        </div>
+
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center px-3"
+                            type="button" (click)="alternarVisibilidadContrasenaReset()"
+                            style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #ffffff;">
+                            <i class="bi" [ngClass]="ocultarContrasenaReset ? 'bi-eye' : 'bi-eye-slash'"></i>
+                        </button>
+                    </div>
+
+                    <div class="small text-start mt-1">
+                        <span *ngIf="errorContrasena === 'required'">La contraseña es obligatoria.<br></span>
+                        <span *ngIf="errorContrasena === 'minlength'">La contraseña es muy corta (Debe tener al menos 8
+                            caracteres).<br></span>
+                        <span *ngIf="errorContrasena === 'pattern'">
+                            <strong>Tu contraseña debe cumplir con lo siguiente:</strong>
+                            <ul class="mb-0 ps-3">
+                                <li>Al menos una letra mayúscula.</li>
+                                <li>Al menos una letra minúscula.</li>
+                                <li>Al menos un número.</li>
+                                <li>Al menos un carácter especial (ejemplo: @, #, $, %, -, _, +, !).</li>
+                            </ul>
+                        </span>
+                    </div>
+
+                    <div id="passwordHelpBlock" class="form-text text-start mt-2">
+                        Por seguridad, no uses información personal como fechas de nacimiento o nombres.
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-outline-secondary" (click)="cerrarModalReset()">Cancelar</button>
+                <button type="button" class="btn btn-primary px-4 fw-bold shadow-sm"
+                    [disabled]="errorContrasena !== 'valida'" (click)="confirmarResetPassword()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" [class.mostrar]="mostrarModalEliminar"
+    [style.display]="mostrarModalEliminar ? 'block' : 'none'"
+    [style.backgroundColor]="mostrarModalEliminar ? 'rgba(0,0,0,0.6)' : 'transparent'">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-black text-white border-0">
+                <h5 class="modal-title">Eliminar Usuario</h5>
+                <button type="button" class="btn-close btn-close-white" (click)="cerrarModalEliminarUsuario()"></button>
+            </div>
+            <div class="modal-body mt-2">
+                <p class="fs-5">¿Deseas eliminar a <strong>@{{
+                        usuarioParaEliminar?.username }}</strong>?</p>
+                <p class="text-muted small">Esta acción no se puede deshacer y borrará toda la información relacionada a
+                    este usuario.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" (click)="cerrarModalEliminarUsuario()">Cancelar</button>
+                <button type="button" class="btn btn-secondary px-4" (click)="confirmarEliminacionUsuario()">Sí,
+                    eliminar
+                    usuario</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -16,7 +16,7 @@
                     <div class="mb-3">
                         <label for="name" class="form-label fw-bold">Nombre de la Tarea</label>
                         <input type="text" class="form-control form-control-lg" id="name" formControlName="name"
-                            placeholder="Ingrese nombre de la tarea"
+                            placeholder="Ingrese nombre de la tarea" appSafeInput
                             [class.is-invalid]="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
 
                         <div class="invalid-feedback text-start mt-1">
@@ -35,8 +35,15 @@
                         <label for="description" class="form-label fw-bold">Descripción</label>
                         <textarea class="form-control" id="description" formControlName="description" rows="3"
                             placeholder="Escribe aquí... (Presiona ENTER para un nuevo checkbox)"
-                            (keydown)="manejarTecladoDescripcion($event)"
+                            (keydown)="manejarTecladoDescripcion($event)" appSafeInput [permitirCaracteresTarea]="true"
                             [class.is-invalid]="taskForm.get('description')?.invalid && taskForm.get('description')?.touched"></textarea>
+                        
+                        <div class="d-flex justify-content-end mt-1">
+                            <small class="text-muted" [class.text-danger]="(taskForm.get('description')?.value?.length || 0) > 500">
+                                {{ taskForm.get('description')?.value?.length || 0 }} / 500
+                            </small>
+                        </div>
+
                         <div class="invalid-feedback text-start mt-1">
                             <span *ngIf="obtenerErrorValidacion('description', 'required')">La descripción es
                                 obligatoria.<br></span>

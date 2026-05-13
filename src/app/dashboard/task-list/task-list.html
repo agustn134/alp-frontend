@@ -111,7 +111,7 @@
     </div>
 </main>
 
-<div class="modal" tabindex="-1" [class.show]="mostrarModalEliminar"
+<div class="modal" tabindex="-1" [class.mostrar]="mostrarModalEliminar"
     [style.display]="mostrarModalEliminar ? 'block' : 'none'"
     [style.backgroundColor]="mostrarModalEliminar ? 'transparent' : 'red'">
     <div class="modal-dialog modal-dialog-centered">
@@ -134,5 +134,5 @@
     </div>
 </div>
 
-<app-task-form *ngIf="showModal" [tareaAEditar]="tareaSeleccionada" (cerrarModal)="closeModal($event)">
+<app-task-form *ngIf="mostrarModal" [tareaAEditar]="tareaSeleccionada" (cerrarModal)="closeModal($event)">
 </app-task-form>

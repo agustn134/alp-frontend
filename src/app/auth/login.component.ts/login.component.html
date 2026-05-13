@@ -10,7 +10,7 @@
                     <div class="form-floating">
                         <input type="text" class="form-control" id="floatingInput" placeholder="Usuario" name="username"
                             [(ngModel)]="loginData.username" required maxlength="100" pattern="^\S+$"
-                            #username="ngModel" [class.is-invalid]="username.invalid && username.touched">
+                            #username="ngModel" appSafeInput [class.is-invalid]="username.invalid && username.touched">
                         <label for="floatingInput">Usuario</label>
                     </div>
 
@@ -30,7 +30,7 @@
                             <input [type]="hidePassword ? 'password' : 'text'" class="form-control"
                                 id="floatingPassword" placeholder="Password" name="password"
                                 [(ngModel)]="loginData.password" required minlength="8"
-                                pattern="^(?=.*[A-Z])(?=.*[\W_]).*$" #pass="ngModel"
+                                pattern="^(?=.*[A-Z])(?=.*[\W_]).*$" #pass="ngModel" appSafeInput
                                 [class.is-invalid]="pass.invalid && (pass.touched || loginForm.submitted)"
                                 aria-describedby="passwordHelpBlock">
                             <label for="floatingPassword">Contraseña</label>

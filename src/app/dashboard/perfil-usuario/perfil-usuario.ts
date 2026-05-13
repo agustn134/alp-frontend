@@ -4,10 +4,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 import { AuthService } from '../../core/services/auth.service';
 import { Toast } from '../../core/services/toast';
 import { NgClass, NgIf } from "@angular/common";
+import { DirectivaDatos } from '../../shared/directivas/diirectivadatos';
 
 @Component({
   selector: 'app-perfil-usuario',
-  imports: [Navbar, ReactiveFormsModule, NgClass, NgIf],
+  imports: [Navbar, ReactiveFormsModule, NgClass, NgIf, DirectivaDatos],
   templateUrl: './perfil-usuario.html',
   styleUrl: './perfil-usuario.scss',
 })
@@ -38,6 +39,7 @@ export class PerfilUsuario {
       confirmarPassword: ['']
     }, { validators: this.validarCoincidenciaContrasenas });
   }
+
   validarCoincidenciaContrasenas(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmarPassword')?.value;

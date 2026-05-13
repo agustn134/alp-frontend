@@ -4,9 +4,11 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Toast } from '../../core/services/toast';
+import { DirectivaDatos } from '../../shared/directivas/diirectivadatos';
+
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterModule, CommonModule],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule, DirectivaDatos],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })

@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task, TaskService } from '../../core/services/task';
 import { Toast } from '../../core/services/toast';
+import { DirectivaDatos } from '../../shared/directivas/diirectivadatos';
 
 @Component({
   selector: 'app-task-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DirectivaDatos],
   templateUrl: './task-form.html',
   styleUrl: './task-form.scss',
 })

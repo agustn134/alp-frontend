@@ -23,7 +23,7 @@ export class TaskList implements OnInit {
   tareas: any[] = [];
   filtrodetareas: Task[] = [];
   tareaSeleccionada: Task | null = null;
-  showModal = false;
+  mostrarModal = false;
 
   mostrarModalEliminar = false;
   idTareaAEliminar: number | null = null;
@@ -136,16 +136,16 @@ export class TaskList implements OnInit {
 
   abrirNuevaTarea() {
     this.tareaSeleccionada = null;
-    this.showModal = true;
+    this.mostrarModal = true;
   }
 
   abrirEditarTarea(tarea: Task) {
     this.tareaSeleccionada = tarea;
-    this.showModal = true;
+    this.mostrarModal = true;
   }
 
   closeModal(reload: boolean) {
-    this.showModal = false;
+    this.mostrarModal = false;
     this.tareaSeleccionada = null;
     if (reload) {
       this.cargarTareas();

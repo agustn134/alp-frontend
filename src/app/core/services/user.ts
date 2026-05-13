@@ -1,23 +1,33 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/user';
+  private apiUrl = environment.userUrl;
 
-  // Obtiene la lista de usuarios (Solo para el Admin)
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl, { withCredentials: true });
   }
 
-  // Cambia la contraseña de un usuario específico
   resetPassword(userId: number, newPassword: string): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${userId}/password`,
       { password: newPassword },
+      { withCredentials: true }
+    );
+  }
+
+  deleteUser(userId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${userId}`, { withCredentials: true });
+  }
+
+  updateRole(userId: number, newRole: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${userId}/role`,
+      { role: newRole },
       { withCredentials: true }
     );
   }

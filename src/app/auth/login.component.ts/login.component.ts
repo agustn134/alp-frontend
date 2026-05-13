@@ -4,11 +4,12 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Toast } from '../../core/services/toast';
+import { DirectivaDatos } from '../../shared/directivas/diirectivadatos';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, DirectivaDatos],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

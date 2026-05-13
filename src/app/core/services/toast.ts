@@ -27,7 +27,7 @@ export class Toast {
   }
 
   showError(message: string) {
-    this.show(message, { classname: 'text-bg-danger' });
+    this.show(message, { classname: 'text-bg-secondary' });
   }
 
   remove(toast: ToastInfo) {
