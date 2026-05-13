@@ -104,7 +104,8 @@ export class TaskForm implements OnInit {
 
     const valoresCrudos = this.taskForm.value;
 
-    let descripcionLimpia = valoresCrudos.descripcion
+    let descripcionBruta = valoresCrudos.description || '';
+    let descripcionLimpia = descripcionBruta
       .split('\n')
       .filter((linea: string) => {
         const lineaSinEspacios = linea.trim();
@@ -119,9 +120,9 @@ export class TaskForm implements OnInit {
     }
 
     const datosProcesadosTarea: Task = {
-      name: valoresCrudos.nombre.trim(),
+      name: valoresCrudos.name.trim(),
       description: descripcionLimpia,
-      priority: valoresCrudos.prioridad === 'true'
+      priority: valoresCrudos.priority === 'true'
     };
 
     if (this.modoEdicion && this.tareaAEditar?.id) {

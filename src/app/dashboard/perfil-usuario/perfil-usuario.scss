@@ -1,0 +1,30 @@
+.profile-container {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.form-profile {
+    max-width: 600px;
+    width: 100%;
+    padding: 1rem;
+}
+
+.card-profile {
+    background-color: #ffffff;
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form-profile .form-floating:focus-within {
+    z-index: 2;
+}
+
+.input-group>.form-floating {
+    flex: 1 1 auto;
+    width: 1%;
+}

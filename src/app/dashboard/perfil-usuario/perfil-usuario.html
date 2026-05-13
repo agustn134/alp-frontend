@@ -1,1 +1,137 @@
 <app-navbar></app-navbar>
+
+<div class="profile-container">
+    <main class="form-profile m-auto">
+
+        <div class="card-profile">
+            <form [formGroup]="formularioPerfil" (ngSubmit)="actualizarPerfil()">
+
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-circle text-primary" style="font-size: 4.5rem;"></i>
+                    <h1 class="h3 mt-2 fw-normal">Mi Perfil</h1>
+                    <p class="text-muted small">Actualiza tu información personal</p>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingNombre" placeholder="Nombre"
+                                formControlName="nombre"
+                                [class.is-invalid]="formularioPerfil.get('nombre')?.invalid && (formularioPerfil.get('nombre')?.touched || formularioPerfil.get('nombre')?.dirty)">
+                            <label for="floatingNombre">Nombre(s)</label>
+                        </div>
+                        <div class="text-danger small text-start mt-1">
+                            <span *ngIf="obtenerErrorValidacion('nombre', 'required')">El nombre es
+                                requerido.<br></span>
+                            <span *ngIf="obtenerErrorValidacion('nombre', 'minlength')">Mínimo 3 letras.<br></span>
+                            <span *ngIf="obtenerErrorValidacion('nombre', 'maxlength')">Máximo 50 letras.<br></span>
+                            <span *ngIf="obtenerErrorValidacion('nombre', 'pattern')">Solo letras y espacios.</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingApellido" placeholder="Apellido"
+                                formControlName="apellido"
+                                [class.is-invalid]="formularioPerfil.get('apellido')?.invalid && (formularioPerfil.get('apellido')?.touched || formularioPerfil.get('apellido')?.dirty)">
+                            <label for="floatingApellido">Apellido(s)</label>
+                        </div>
+                        <div class="text-danger small text-start mt-1">
+                            <span *ngIf="obtenerErrorValidacion('apellido', 'required')">El apellido es
+                                requerido.<br></span>
+                            <span *ngIf="obtenerErrorValidacion('apellido', 'minlength')">Mínimo 3 letras.<br></span>
+                            <span *ngIf="obtenerErrorValidacion('apellido', 'maxlength')">Máximo 50 letras.<br></span>
+                            <span *ngIf="obtenerErrorValidacion('apellido', 'pattern')">Solo letras y espacios.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted">@</span>
+                        <div class="form-floating flex-grow-1">
+                            <input type="text" class="form-control" id="floatingUsername" placeholder="Usuario"
+                                formControlName="username"
+                                [class.is-invalid]="(formularioPerfil.get('username')?.invalid || obtenerErrorValidacion('username', 'inUse')) && (formularioPerfil.get('username')?.touched || formularioPerfil.get('username')?.dirty)">
+                            <label for="floatingUsername">Usuario (Único)</label>
+                        </div>
+                    </div>
+                    <div class="text-danger small text-start mt-1">
+                        <span *ngIf="obtenerErrorValidacion('username', 'required')">El usuario es
+                            obligatorio.<br></span>
+                        <span *ngIf="obtenerErrorValidacion('username', 'minlength')">Debe tener al menos 4
+                            caracteres.<br></span>
+                        <span *ngIf="obtenerErrorValidacion('username', 'maxlength')">No puede exceder los 100
+                            caracteres.<br></span>
+                        <span *ngIf="obtenerErrorValidacion('username', 'pattern')">No puede contener espacios en
+                            blanco.<br></span>
+                        <span *ngIf="obtenerErrorValidacion('username', 'inUse')"><strong>Este nombre de usuario ya está
+                                ocupado.</strong></span>
+                    </div>
+                </div>
+
+                <hr class="my-4 text-muted">
+                <h5 class="mb-3 text-secondary fs-6">Cambiar Contraseña: </h5>
+                <p class="small text-muted mb-4">Solo llena estos campos si deseas cambiar la contraseña:</p>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        <div class="form-floating flex-grow-1">
+                            <input [type]="ocultarContrasena ? 'password' : 'text'" class="form-control"
+                                id="floatingPassword" placeholder="Nueva Contraseña" formControlName="password"
+                                [class.is-invalid]="formularioPerfil.get('password')?.invalid && (formularioPerfil.get('password')?.touched || formularioPerfil.get('password')?.dirty)"
+                                aria-describedby="passwordHelpBlock">
+                            <label for="floatingPassword">Nueva Contraseña Segura</label>
+                        </div>
+
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center px-3"
+                            type="button" (click)="alternarVisibilidadContrasena()"
+                            style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #f8f9fa;">
+                            <i class="bi" [ngClass]="ocultarContrasena ? 'bi-eye' : 'bi-eye-slash'"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-danger small text-start mt-1">
+                        <span *ngIf="obtenerErrorValidacion('password', 'minlength')">Debe tener al menos 8
+                            caracteres.<br></span>
+                        <span *ngIf="obtenerErrorValidacion('password', 'pattern')">Falta una mayúscula, un número o un
+                            carácter especial.</span>
+                    </div>
+
+                    <div id="passwordHelpBlock" class="form-text text-start mt-1">
+                        Tu contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, un número y un
+                        carácter especial (ej. @, #, !).
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="input-group">
+                        <div class="form-floating flex-grow-1">
+                            <input [type]="ocultarContrasena ? 'password' : 'text'" class="form-control"
+                                id="floatingConfirmPassword" placeholder="Confirmar Nueva Contraseña"
+                                formControlName="confirmarPassword"
+                                [class.is-invalid]="(formularioPerfil.get('confirmarPassword')?.invalid || formularioPerfil.hasError('mismatch')) && (formularioPerfil.get('confirmarPassword')?.touched || formularioPerfil.get('confirmarPassword')?.dirty)">
+                            <label for="floatingConfirmPassword">Confirmar Nueva Contraseña</label>
+                        </div>
+                        <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center px-3"
+                            type="button" (click)="alternarVisibilidadContrasena()"
+                            style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #f8f9fa;">
+                            <i class="bi" [ngClass]="ocultarContrasena ? 'bi-eye' : 'bi-eye-slash'"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-danger small text-start mt-1"
+                        *ngIf="(formularioPerfil.get('confirmarPassword')?.invalid || formularioPerfil.hasError('mismatch')) && (formularioPerfil.get('confirmarPassword')?.touched || formularioPerfil.get('confirmarPassword')?.dirty)">
+                        <span *ngIf="formularioPerfil.hasError('mismatch')">Las contraseñas no coinciden.</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary w-100 py-3 mt-3 fw-bold shadow-sm" type="submit" [disabled]="formularioPerfil.invalid">
+                    Guardar Cambios
+                </button>
+
+            </form>
+        </div>
+
+    </main>
+</div>

@@ -36,9 +36,12 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/me`);
   }
 
+  updateProfile(id: number, userData: any): Observable<any> {
+    return this.http.patch(`${this.userUrl}/profile`, userData);
+  }//perfil del usuario actualizado
+
   logout(): void {
     sessionStorage.clear();
-    //borramos la sesión en memoria
     this.currentUserSubject.next(false);
     this.isLoggedIn.next(false);
   }
