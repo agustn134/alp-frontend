@@ -63,14 +63,7 @@
                     </div>
 
                     <div class="btn-group">
-                        <button class="btn btn-sm"
-                            [ngClass]="usuario.role === 'ADMIN' ? 'btn-dark' : 'btn-outline-dark'"
-                            [disabled]="usuario.id === usuarioActual.id"
-                            title="{{ usuario.role === 'ADMIN' ? 'Degradar a Usuario Normal' : 'Promover a Administrador' }}"
-                            (click)="cambiarRolUsuario(usuario)">
-                            <i class="bi"
-                                [ngClass]="usuario.role === 'ADMIN' ? 'bi-caret-down-square' : 'bi-caret-up-square'"></i>
-                        </button>
+
                         <button class="btn btn-sm btn-outline-secondary" title="Resetear Contraseña"
                             (click)="abrirModalReset(usuario)">
                             <i class="bi bi-unlock2-fill"></i>
@@ -83,7 +76,7 @@
                     </div>
                 </div>
                 <span class="d-block text-muted mt-1">
-                    ID: {{ usuario.id }} | <strong> @{{ usuario.username }}</strong> | Creado el día: {{
+                    <strong> @{{ usuario.username }}</strong> | Creado el día: {{
                     usuario.created_at | date:'shortDate' }}
                 </span>
             </div>
@@ -138,10 +131,10 @@
                 </div>
 
                 <p class="mb-1 text-dark">{{ log.error || 'Acción ejecutada correctamente.' }}</p>
-                <span class="text-muted d-block" style="font-size: 0.8rem;">
+                <!-- <span class="text-muted d-block" style="font-size: 0.8rem;">
                     Ruta: <span class="text-primary font-monospace">{{ log.path || 'N/A' }}</span>
                     <span *ngIf="log.user_id"> | <strong>Usuario ID: {{ log.user_id }}</strong></span>
-                </span>
+                </span> -->
             </div>
         </div>
 

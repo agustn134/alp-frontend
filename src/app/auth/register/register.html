@@ -67,7 +67,7 @@
                     <div class="input-group">
                         <div class="form-floating flex-grow-1">
                             <input [type]="hidePassword ? 'password' : 'text'" class="form-control"
-                                id="floatingPassword" placeholder="Password" formControlName="password" appSafeInput
+                                id="floatingPassword" placeholder="Password" formControlName="password"
                                 [class.is-invalid]="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || isSubmitted)"
                                 aria-describedby="passwordHelpBlock">
                             <label for="floatingPassword">Contraseña Segura</label>
@@ -102,7 +102,7 @@
                         <div class="form-floating flex-grow-1">
                             <input [type]="hidePassword ? 'password' : 'text'" class="form-control"
                                 id="floatingConfirmPassword" placeholder="Confirmar Password"
-                                formControlName="confirmPassword" appSafeInput
+                                formControlName="confirmPassword"
                                 [class.is-invalid]="(registerForm.get('confirmPassword')?.invalid || registerForm.hasError('mismatch')) && (registerForm.get('confirmPassword')?.touched || isSubmitted)">
                             <label for="floatingConfirmPassword">Confirmar Contraseña</label>
                         </div>
